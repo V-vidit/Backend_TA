@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="res">
+
+    </div>
+</body>
+<script>
+
+    let res=document.getElementsByClassName("res")[0];
+    
+    let x=parseFloat(prompt("Enter value for A: "));
+    let op=prompt("Enter operator: ");
+    let y=parseFloat(prompt("Enter value for B: "));
+
+    let ans;
+    if(op==="+"){
+        ans=x+y;
+    }else if(op==="-"){
+        ans=x-y;
+    }else if(op==="*"){
+        ans=x*y;
+    }else if(op==="/"){
+        ans=x/y;
+    }else{
+        res.innerHTML="Invalid Operator";
+    }
+
+    res.innerHTML=ans;
+    
+</script>
+</html>

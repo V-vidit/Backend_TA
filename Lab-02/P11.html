@@ -1,0 +1,24 @@
+<input type="checkbox" class="roll" value="101"> 101 <br>
+<input type="checkbox" class="roll" value="102"> 102 <br>
+<input type="checkbox" class="roll" value="103"> 103 <br>
+
+<p id="output"></p>
+
+<script>
+const checkboxes = document.getElementsByClassName("roll");
+const output = document.getElementById("output");
+
+for (let cb of checkboxes) {
+    cb.addEventListener("change", function() {
+        let selected = [];
+
+        for (let box of checkboxes) {
+            if (box.checked) {
+                selected.push(box.value);
+            }
+        }
+
+        output.textContent = selected.join(", ");
+    });
+}
+</script>
