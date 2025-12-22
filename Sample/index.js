@@ -1,32 +1,68 @@
-const express = require('express')
-require('dotenv').config()
+const express= require("express");
+const mongoose= require("mongoose");
+const dotenv=require("dotenv");
 const app=express();
-const mongoose=require('mongoose');
-const user =require('./models/user');
-app.use(express.json())
-
+dotenv.config()
+const User=require("./models/user")
 
 mongoose.connect(process.env.mongourl).then(()=>{
-    console.log("mongo connection successful");
+    console.log("DB Connected");
 }).catch((err)=>{
     console.log(err);
 })
 
+app.use(express.json())
 
-app.post('/register',async(req,res)=>{
-    const User= new user({
-        "name":"parth",
-        "email":"email@gmail.com",
-        "password":"1234",
-        "phone":1234567890
-    });
-     const newUser=await User.save();
-
-     return res.status(200).json({message:"successfully registered",newUser})
-
+app.get("/users", async(req,res)=>{
+    try{
+        const users=await User.find();
+        res.json({users: users})
+    }
+    catch(err){
+        res.json({err});
+    }
 })
 
-app.listen(3000,()=>{
-    console.log("server started at 3000");
-    
+app.post("/register", async(req,res)=>{
+    try{
+        const newUser=await User.create(req.body);
+        res.json({message: "User created successfully", user: newUser});
+    }
+    catch(err){
+        res.json({err})
+    }
 })
+
+app.patch("/update/:id", async(req,res)=>{
+    try{
+        const user= await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body
+            },
+            {new:true}
+        );
+
+        res.json({message: "User updated successfully", user: user});
+    }
+    catch(err){
+        res.json({err});
+    }
+})
+
+app.delete("/delete/:id", async(req,res)=>{
+    try{
+        const user= await User.findByIdAndDelete(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.json({message: "User deleted successfully", deletedUser: user})
+    }
+    catch(err){
+        res.json({err})
+    }
+})
+
+app.listen(3000)
