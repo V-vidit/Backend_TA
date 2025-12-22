@@ -4,6 +4,7 @@ const dotenv=require("dotenv");
 const app=express();
 dotenv.config()
 const User=require("./models/user")
+const bcrypt=require("bcryptjs")
 
 mongoose.connect(process.env.mongourl).then(()=>{
     console.log("DB Connected");
@@ -25,8 +26,18 @@ app.get("/users", async(req,res)=>{
 
 app.post("/register", async(req,res)=>{
     try{
-        const newUser=await User.create(req.body);
-        res.json({message: "User created successfully", user: newUser});
+        const {name,email,password,phone}= req.body;
+
+        const hashedPassword= await bcrypt.hash(password,10);
+
+        const user=await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            phone
+        })
+
+        res.json({message: "User created successfully", user: user});
     }
     catch(err){
         res.json({err})
