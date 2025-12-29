@@ -1,20 +1,22 @@
 const express=require("express");
-const mongoose=require("mongoose");
-const app=express();
-
 const dotenv=require("dotenv");
+const mongoose=require("mongoose");
+const bcrypt=require("bcryptjs");
+
 dotenv.config();
+
+const app=express();
 
 mongoose.connect(process.env.mongourl).then(()=>{
     console.log("DB Connected");
 }).catch((err)=>{
     console.log(err);
-});
+})
 
 const User=require("./models/user");
 
-app.use(express.json());
-// GetAll users route
+app.use(express.json())
+
 app.get("/users", async(req,res)=>{
     try{
         const users= await User.find();
@@ -25,34 +27,32 @@ app.get("/users", async(req,res)=>{
     }
 })
 
-app.get("/users/:id", async(req,res)=>{
+app.get("/users/:id",async(req,res)=>{
     try{
-        const user=await User.findById(req.params.id);
-
+        const user= await User.findById(req.params.id);
         if (!user) {
             return res.json({message: "User not found"})
         }
-
-        res.json({mesaage: "User fetched", user:user})
+        res.json({message:"User fetched", user:user})
     }
     catch(err){
-        res.json({err})
+        res.json({err});
     }
 })
 
-//Create a user
 app.post("/register", async(req,res)=>{
     try{
-        const {name,email,password,phone}= req.body;
+        const {name, email, password, phone}= req.body;
 
-        const user= await User.create({
+        const hashedPassword= await bcrypt.hash(password, 10);
+
+        const newUser= await User.create({
             name,
             email,
-            password,
+            password: hashedPassword,
             phone
         });
-
-        res.json({message: "User created successfully", newUser: user});
+        res.json({message: "User registered successfully", newUser: newUser});
     }
     catch(err){
         res.json({err});
@@ -61,21 +61,19 @@ app.post("/register", async(req,res)=>{
 
 app.patch("/update/:id", async(req,res)=>{
     try{
-        const users=await User.findByIdAndUpdate(
+        const user=await User.findByIdAndUpdate(
             req.params.id,
             {
                 $set: req.body
             },
             {
                 new: true
-            }
+            }   
         );
-
-        if (!users) {
-            return res.status(404).json({message: "User not found"});
+        if (!user) {
+            return res.status(404).json({message: "User not found"})
         }
-
-        res.json({message: "User updated successfully", updatedUser: users});
+        res.json({message: "User updated successfully", updatedUser: user});
     }
     catch(err){
         res.json({err});
@@ -84,12 +82,10 @@ app.patch("/update/:id", async(req,res)=>{
 
 app.delete("/delete/:id", async(req,res)=>{
     try{
-        const user= await User.findByIdAndDelete(req.params.id);
-
+        const user=await User.findByIdAndDelete(req.params.id);
         if (!user) {
-            return res.status(404).json({message: "User not found"})
+            return res.json({message: "User not  found"})
         }
-
         res.json({message: "User deleted successfully", deletedUser: user})
     }
     catch(err){
@@ -97,4 +93,29 @@ app.delete("/delete/:id", async(req,res)=>{
     }
 })
 
-app.listen(3000)
+app.post("/login", async(req,res)=>{
+    try{
+        const {email, password}= req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({message: "Missing credentials"});
+        }
+
+        const user = await User.findOne({email});
+
+        if (!user) {
+            return res.status(401).json({message: "Invalid Credentials"});
+        }
+
+        const isMatch= await bcrypt.compare(password,user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({message: "Invalid credentials"})
+        }
+
+        
+
+    }
+})
+
+app.listen(3000);
