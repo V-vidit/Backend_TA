@@ -9,9 +9,9 @@ const app = express()
 
 const mongoose = require('mongoose')
 
-const generateToken = (userId)=>
+const generateToken = (userId, userName)=>
 {
-    return jwt.sign({id:userId},process.env.secret,{expiresIn:'1h'})
+    return jwt.sign({id:userId, name: userName},process.env.secret,{expiresIn:'1h'})
 }
 
 
