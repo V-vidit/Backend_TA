@@ -7,13 +7,6 @@ const bookSchema = new mongoose.Schema(
       required: true,
     },
     author: String,
-
-    totalQuantity: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-
     availableQuantity: {
       type: Number,
       required: true,
