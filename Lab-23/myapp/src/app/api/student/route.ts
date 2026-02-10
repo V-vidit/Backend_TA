@@ -7,8 +7,11 @@ export async function GET(req:NextRequest) {
 
 export async function POST(req: NextRequest) {
     const data=await req.json();
+
+    const maxId= students.length? Math.max(...students.map(s=>s.id)) : 0;
+
     const newStudent={
-        id: students.length+1,
+        id: maxId+1,
         name: data.name
     };
 
