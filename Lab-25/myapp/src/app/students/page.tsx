@@ -10,7 +10,7 @@ function page() {
     const [loading, setLoading]=useState<boolean>(true);
 
     const fetchData=async()=>{
-        const res=await fetch("https://67b5841e07ba6e59083d1bb6.mockapi.io/users");
+        const res=await fetch("url");
         const data=await res.json();
 
         setData(data);

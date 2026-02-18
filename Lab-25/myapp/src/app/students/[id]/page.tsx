@@ -5,7 +5,7 @@ async function page(
 ) {
 
     const {id}=await params
-    const res=await fetch(`https://67b5841e07ba6e59083d1bb6.mockapi.io/users/${id}`)
+    const res=await fetch(`url`)
 
     const data=await res.json();
     
