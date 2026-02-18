@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(req: NextRequest){
     const url=req.nextUrl;
-    console.log(req)
     console.log(req.nextUrl)
     console.log("Middleware called")
     if (url.pathname=='/products') {
