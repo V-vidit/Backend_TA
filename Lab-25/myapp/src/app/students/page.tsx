@@ -7,14 +7,15 @@ function page() {
     const router=useRouter();
 
     const [data,setData]=useState<any>([]);
-    const [loading, setLoading]=useState<boolean>(true);
+
+    const [loading,setLoading]=useState<boolean>(true);
 
     const fetchData=async()=>{
-        const res=await fetch("url");
+        const res=await fetch("https://67b5841e07ba6e59083d1bb6.mockapi.io/users")
         const data=await res.json();
 
-        setData(data);
-        setLoading(false);
+         setData(data);
+         setLoading(false);
     }
 
     useEffect(()=>{
@@ -30,14 +31,16 @@ function page() {
               <th scope="col">Name</th>
               <th scope="col">City</th>
               <th scope="col">Role</th>
-              <th scope='col'>Actions</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
 
             {loading && 
                 <tr>
-                    <td colSpan={5}>Loading data</td>
+                    <td colSpan={4}>
+                        Loading data
+                    </td>
                 </tr>
             }
 
@@ -58,6 +61,7 @@ function page() {
             })}
           </tbody>
         </table>
+
     </>
   )
 }
