@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const studentSchema =  new mongoose.Schema({
-    First:String,
+    First:{},
     Last:String,
     City:String
 },{timestamps:true})

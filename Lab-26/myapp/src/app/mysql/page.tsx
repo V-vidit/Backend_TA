@@ -8,7 +8,8 @@ function page() {
   const fetchData=async()=>{
     const res=await fetch("/api/users");
     const data=await res.json();
-
+    console.log(data);
+    
     setData(data);
   }
 
@@ -29,8 +30,8 @@ function page() {
           </tr>
         </thead>
         <tbody>
-          {data.map((user:any)=>{
-            return(
+          {data.map((user:any)=>(
+            
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.full_name}</td>
@@ -38,8 +39,8 @@ function page() {
                 <td>{user.phone}</td>
                 <td>{user.role}</td>
               </tr>
-            )
-          })}
+            
+          ))}
         </tbody>
       </table>
     </>

@@ -2,7 +2,7 @@
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
- function page({params}:{params:{id:number}}) {
+function page({params}:{params:{id:number}}) {
     const {id} = useParams();
     const [data,setData]= useState<any>([])
 
@@ -16,8 +16,6 @@ import React, { useEffect, useState } from 'react'
     },[])
   return (
     <div>
-
-        <h1>hello</h1>
         {data.First}
         {data.Last}
         {data.City} 
