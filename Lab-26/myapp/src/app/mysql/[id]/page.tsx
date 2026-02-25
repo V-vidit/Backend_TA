@@ -10,6 +10,8 @@ function page({params}: {params: {id:string}}) {
         const res =  await fetch(`/api/users/${id}`)
         const temp= await res.json()
 
+        console.log(temp)
+
         setData(temp.rows[0]);
     }
     useEffect(()=>{
