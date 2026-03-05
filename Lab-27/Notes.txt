@@ -1,0 +1,157 @@
+
+PRISMA COMMAND FLOW GUIDE
+
+1. INSTALL & INITIALIZE (FIRST TIME)
+
+npm install prisma @prisma/client
+npx prisma init
+
+This creates:
+
+* prisma/schema.prisma
+* .env file
+
+---
+
+2. CONFIGURE DATABASE
+
+Edit .env file
+
+For MySQL / PostgreSQL:
+DATABASE_URL="mysql://root:password@localhost:3306/mydb"
+
+For MongoDB:
+DATABASE_URL="mongodb://localhost:27017/mydb"
+
+---
+
+3. DEFINE MODELS
+
+Open:
+prisma/schema.prisma
+
+Example (MongoDB):
+
+model User {
+id    String @id @default(auto()) @map("_id") @db.ObjectId
+name  String
+email String @unique
+}
+
+---
+
+MAIN PRISMA COMMANDS
+
+1. prisma generate
+
+npx prisma generate
+
+Purpose:
+
+* Generates Prisma Client based on schema
+* Must run after schema changes
+
+---
+
+2. prisma db push
+
+npx prisma db push
+
+Purpose:
+
+* Pushes schema changes directly to database
+* No migration history created
+* Best for development and MongoDB
+
+---
+
+3. prisma db pull
+
+npx prisma db pull
+
+Purpose:
+
+* Pulls existing database structure into schema.prisma
+* Used when working with an existing database
+
+---
+
+4. prisma migrate dev (For SQL Databases)
+
+npx prisma migrate dev --name init
+
+Purpose:
+
+* Creates migration files
+* Updates database
+* Generates Prisma client
+* Used for production-ready SQL projects
+
+---
+
+COMPLETE DEVELOPMENT FLOWS
+
+New Project Flow:
+
+npx prisma init
+Configure DATABASE_URL
+Define models
+npx prisma db push
+npx prisma generate
+
+---
+
+Modify Schema (Development):
+
+Edit schema.prisma
+npx prisma db push
+npx prisma generate
+
+---
+
+Production Flow (SQL):
+
+Edit schema.prisma
+npx prisma migrate dev --name updateModel
+
+---
+
+Existing Database Flow:
+
+npx prisma db pull
+npx prisma generate
+
+---
+
+QUICK COMPARISON
+
+db push
+✔ Updates database
+✘ No migration files
+✘ Does not automatically generate client
+
+db pull
+✘ Does not update database
+✘ No migration files
+✘ Does not generate client
+
+generate
+✘ Does not update database
+✘ No migration files
+✔ Generates client
+
+migrate dev
+✔ Updates database
+✔ Creates migration files
+✔ Generates client
+
+---
+
+IMPORTANT NOTES
+
+* Always run "npx prisma generate" after schema changes.
+* Use "db push" for MongoDB projects.
+* Use "migrate dev" for SQL production projects.
+* Use "db pull" when working with an existing or legacy database.
+
+---

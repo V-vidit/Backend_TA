@@ -1,3 +1,4 @@
+
 import React from 'react'
 
 async function page({params}: {params: Promise<{id: number}>}) {
