@@ -1,46 +1,36 @@
-import { Controller, Get, Param, Post, Body, Put, Delete} from '@nestjs/common';
-
-
-// npm i -g @nestjs/cli
-// nest g module student
-// nest g controller student
+import { All, Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Redirect } from '@nestjs/common';
+import { StudentService } from './student.service';
 
 @Controller('student')
 export class StudentController {
 
+    constructor(private readonly studentServices: StudentService){}
+    
     @Get()
+    @HttpCode(201) //used to explicitly change the status code
     findAll(){
-        return {
-            message: "FindAll Method Called"
-        }
-    };
+        return this.studentServices.findAll();
+    }
 
     @Get(':id')
-    findOne(@Param('id') id: string){
-        return {
-            message: `FindOne for ID: ${id}`
-        }
+    findbyid(@Param('id') id:string){
+        return this.studentServices.findOne(id);
     }
 
     @Post()
-    insert(@Body() body: any){
-        return {
-            message: "Insert Method Called",
-            data: body
-        };
+    insert(@Body () body:any){
+        return this.studentServices.insert(body);
     }
 
     @Put(':id')
-    update(@Param('id') id: string){
-        return {
-            message: `Update called for ${id}`
-        };
+    update(@Param ('id') id:string,@Body () body :any){
+        return this.studentServices.update(id, body);
     }
 
     @Delete(':id')
-    delete(@Param('id') id: string){
-        return {
-            message: `Delete for ID: ${id}`
-        }
+    delete(@Param('id') id:string){
+        return this.studentServices.delete(id);
     }
+
+    
 }
