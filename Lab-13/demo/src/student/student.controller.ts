@@ -5,6 +5,7 @@ import { StudentService } from './student.service';
 export class StudentController {
 
     constructor(private readonly studentServices: StudentService){}
+    //private studentService= new StudentService();
     
     @Get()
     @HttpCode(201) //used to explicitly change the status code
